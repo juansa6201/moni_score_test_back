@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+from typing import Any
+
 import django_filters.rest_framework as django_filters
 from drf_spectacular.utils import extend_schema
 from drf_spectacular.utils import OpenApiExample
 from rest_framework import mixins
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from scoring import models
@@ -18,7 +21,9 @@ from shared import pagination
 @extend_schema(tags=['Score'])
 class ScoreViewSet(
     mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
     mixins.ListModelMixin,
+    # No definimos el update porque agrega el metodo PUT que no necesitamos.
     viewsets.GenericViewSet,
 ):
     queryset = models.Score.objects.all().order_by('id')
@@ -44,18 +49,54 @@ class ScoreViewSet(
         ],
     )
     # Definición del método para crear un nuevo objeto Score.
-    def create(self, request, *args, **kwargs) -> Response:
-        # Se serializa, valida y guarda la persona a crear.
+    def create(self, request: Request, *args, **kwargs) -> Response:
+        # Serializa, valida y guarda la persona a crear.
         persona_serializer = serializers.PersonaSerializer(data=request.data)
         persona_serializer.is_valid(raise_exception=True)
         persona: models.Persona = persona_serializer.save()
 
-        # Se serializa, valida y guarda el score a crear.
+        # Serializa, valida y guarda el score a crear.
         socre_serializer = serializers.ScorePOSTSerializer(data={'persona': persona.pk})
         socre_serializer.is_valid(raise_exception=True)
         score = socre_serializer.save()
 
-        # Se serializa la respuesta y se retorna un Response con el objeto creado y el status 201.
+        # Serializa la respuesta y se retorna un Response con el objeto creado y el status 201.
         res_serializer = self.serializer_class(score)
         headers = self.get_success_headers(res_serializer.data)
         return Response(res_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    @extend_schema(
+        request=serializers.PersonaSerializer,
+        responses={status.HTTP_200_OK: serializer_class},
+        examples=[
+            OpenApiExample(
+                name='persona',
+                request_only=True,
+                value={
+                    'nombre': 'Juan Cruz',
+                    'apellido': 'Mare',
+                    'dni': '43232525',
+                    'email': 'test@gmail.com',
+                    'genero': 'M',
+                },
+            ),
+        ],
+    )
+    # Definición del método para actualizar un objeto Score.
+    def update(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        # Obtiene la instancia Score.
+        instance = self.get_object()
+        # Obtiene los datos de persona desde el request.
+        persona_data = request.data.get('persona')
+
+        # Serializa, valida y guarda la persona a actualizar.
+        persona_serializer = serializers.PersonaSerializer(
+            instance=instance.persona, data=persona_data
+        )
+        persona_serializer.is_valid(raise_exception=True)
+        persona_serializer.save()
+
+        # Serializa la instancia Score con la persona actualizada.
+        serializer = serializers.ScoreSerializer(instance)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
