@@ -1,0 +1,37 @@
+[build-system]
+# Minimum requirements for the build system to execute.
+requires = ["setuptools", "wheel"]  # PEP 508 specifications.
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "moni-score"
+version = "0.0.0"
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+skip-string-normalization = true
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+minversion = "7.1"
+addopts = "-vvs"
+testpaths = ["tests"]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+env = [
+  "URL_PREFIX="
+]
+
+[tool.mypy]
+ignore_missing_imports = true
+scripts_are_modules = true
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+
+[[tool.mypy.overrides]]
+module = "*.migrations.*"
+ignore_errors = true
+
+[tool.django-stubs]
+django_settings_module = "tests.settings"

@@ -1,0 +1,6 @@
+[flake8]
+# https://www.flake8rules.com/rules/E203.html
+# https://www.flake8rules.com/rules/E501.html
+# https://www.flake8rules.com/rules/W503.html
+ignore = E203, E501, W503
+max-line-length = 100
