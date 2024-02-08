@@ -86,12 +86,10 @@ class ScoreViewSet(
     def update(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         # Obtiene la instancia Score.
         instance = self.get_object()
-        # Obtiene los datos de persona desde el request.
-        persona_data = request.data.get('persona')
 
         # Serializa, valida y guarda la persona a actualizar.
         persona_serializer = serializers.PersonaSerializer(
-            instance=instance.persona, data=persona_data
+            instance=instance.persona, data=request.data
         )
         persona_serializer.is_valid(raise_exception=True)
         persona_serializer.save()
