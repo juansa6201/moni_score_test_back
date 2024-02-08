@@ -1,0 +1,42 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Swagger</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="{% static 'swagger-ui.css' %}" />
+    <style>
+      :is(.model :is(.prop, .description), .parameters-col_description) .renderedMarkdown > ul > li > code {
+        line-height: 2;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="swagger-ui"></div>
+    <script src="{% static 'swagger-ui-bundle.js' %}"></script>
+    <script>
+      const config = {
+        url: '{% url schema_url %}',
+        dom_id: '#swagger-ui',
+        layout: 'BaseLayout',
+        deepLinking: true,
+        showExtensions: true,
+        showCommonExtensions: true,
+        syntaxHighlight: {
+          theme: 'obsidian',
+        },
+        presets: [SwaggerUIBundle.presets.apis, SwaggerUIBundle.SwaggerUIStandalonePreset],
+        // tryItOutEnabled: true,
+        // requestInterceptor: (request) => {
+        //   request.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        //   return request;
+        // },
+        persistAuthorization: true,
+      };
+      window.swagger = SwaggerUIBundle(config);
+      console.log(JSON.stringify({ config, swaggerUi: window.versions.swaggerUi }, null, 4));
+    </script>
+  </body>
+</html>
