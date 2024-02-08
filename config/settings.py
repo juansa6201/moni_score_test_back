@@ -183,3 +183,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [],
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
+
+MONI_TOKEN = get_env_or_raise('MONI_TOKEN')
+MONI_URL = get_env_or_raise('MONI_URL')
