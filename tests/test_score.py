@@ -35,8 +35,9 @@ def test_score_viewset_create():
             'apellido': 'Mare',
             'dni': '43232227',
             'email': 'jcmare18@gmail.com',
-            'genero': 'D',
+            'genero': 'Desconocido',
         },
+        'id': 1,
         'status': 'Aprobado',
     }
 
@@ -75,8 +76,9 @@ def test_score_viewset_list(score: Score):
                 'apellido': 'Mare',
                 'dni': '12345678',
                 'email': 'jcmare18@gmail.com',
-                'genero': 'D',
+                'genero': 'Desconocido',
             },
+            'id': 1,
             'status': 'Aprobado',
         }
     ]
@@ -101,8 +103,9 @@ def test_score_viewset_update(score: Score):
             'apellido': 'Mare',
             'dni': '43232227',
             'email': 'jcmare18@gmail.com',
-            'genero': 'D',
+            'genero': 'Desconocido',
         },
+        'id': 1,
         'status': 'Aprobado',
     }
 
@@ -148,7 +151,6 @@ def test_score_serializer_errors():
         serializer.errors['persona']['dni'][1]
         == 'Asegúrese de que este campo no tenga más de 8 caracteres.'
     )
-    assert serializer.errors['persona']['genero'][0] == '"J" no es una elección válida.'
 
 
 @pytest.mark.usefixtures(

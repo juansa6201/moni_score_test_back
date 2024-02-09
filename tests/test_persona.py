@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 from scoring.models import Persona
+from scoring.serializers import PersonaPOSTSerializer
 from scoring.serializers import PersonaSerializer
 
 
-def test_persona_serializer():
-    serializer = PersonaSerializer(
+def test_persona_post_serializer():
+    serializer = PersonaPOSTSerializer(
         data={
             'nombre': 'Juan Cruz',
             'apellido': 'Mare',
@@ -21,8 +22,8 @@ def test_persona_serializer():
     assert persona.nombre == 'Juan Cruz'
 
 
-def test_persona_serializer_error():
-    serializer = PersonaSerializer(
+def test_persona_post_serializer_error():
+    serializer = PersonaPOSTSerializer(
         data={
             'nombre': 'Juan Cruz',
             'apellido': 'Mare',
@@ -37,3 +38,19 @@ def test_persona_serializer_error():
     )
     assert serializer.errors['genero'][0] == '"Z" no es una elección válida.'
     assert Persona.objects.count() == 0
+
+
+def test_persona_serializer():
+    serializer = PersonaSerializer(
+        data={
+            'nombre': 'Juan Cruz',
+            'apellido': 'Mare',
+            'dni': '43232227',
+            'email': 'jcmare18@gmail.com',
+        }
+    )
+    assert serializer.is_valid(), serializer.errors
+
+    persona = serializer.save()
+    assert Persona.objects.count() == 1
+    assert persona.nombre == 'Juan Cruz'
