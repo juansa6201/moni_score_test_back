@@ -9,8 +9,8 @@ from shared.utils import DNI_REGEX
 
 class Persona(BaseModel):
     class Genero(models.TextChoices):
-        HOMBRE = 'M', 'Masculino'
-        MUJER = 'F', 'Femenino'
+        MASCULINO = 'M', 'Masculino'
+        FEMENINO = 'F', 'Femenino'
         DESCONOCIDO = 'D', 'Desconocido'
 
     nombre = models.CharField(max_length=40)

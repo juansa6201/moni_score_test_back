@@ -23,7 +23,7 @@ class ScoreViewSet(
     mixins.CreateModelMixin,
     mixins.DestroyModelMixin,
     mixins.ListModelMixin,
-    # No definimos el update porque agrega el metodo PUT que no necesitamos.
+    # No definimos el update porque agrega el metodo PATCH que no necesitamos.
     viewsets.GenericViewSet,
 ):
     queryset = models.Score.objects.all().order_by('id')
