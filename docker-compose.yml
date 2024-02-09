@@ -22,5 +22,5 @@ services:
     volumes:
       - moni-score-db:/var/lib/postgresql/data
 
-#volumes:
-#  moni-score-db:
+volumes:
+  moni-score-db:
