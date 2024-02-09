@@ -13,6 +13,7 @@ from rest_framework.response import Response
 
 from scoring import models
 from scoring import serializers
+from scoring.filters import ScoreFilter
 from shared import pagination
 
 # Definición de la vista ScoreViewSet.
@@ -30,6 +31,7 @@ class ScoreViewSet(
     serializer_class = serializers.ScoreSerializer
     pagination_class = pagination.PageNumberPagination
     filter_backends = (django_filters.DjangoFilterBackend,)
+    filterset_class = ScoreFilter
 
     @extend_schema(
         request=serializers.PersonaSerializer,
