@@ -1,4 +1,17 @@
 # Moni Score
+## Entorno de produccion
+
+- Clonar ambos repositorios: Este mismo y el del [frontend](https://github.com/juansa6201/moni_score_test_front/).
+- Pararse en la carpeta del backend.
+- Modificar las variables de entorno. El ejemplo tiene la configuración necesaria. ACLARACION: Descomentar las lineas correspondientes a la db postgres.
+  
+  ```sh
+  cp .env.example .env
+  ```
+- Correr el archivo docker-compose.yml.
+  ```sh
+  docker-compose up
+  ```
 
 ## Entorno de desarrollo
 
