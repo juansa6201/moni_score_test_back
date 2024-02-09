@@ -27,14 +27,14 @@ class ScoreViewSet(
     # No definimos el update porque agrega el metodo PATCH que no necesitamos.
     viewsets.GenericViewSet,
 ):
-    queryset = models.Score.objects.all().order_by('id')
+    queryset = models.Score.objects.all().order_by('id').order_by('-created_at')
     serializer_class = serializers.ScoreSerializer
     pagination_class = pagination.PageNumberPagination
     filter_backends = (django_filters.DjangoFilterBackend,)
     filterset_class = ScoreFilter
 
     @extend_schema(
-        request=serializers.PersonaSerializer,
+        request=serializers.PersonaPOSTSerializer,
         responses={status.HTTP_201_CREATED: serializer_class},
         examples=[
             OpenApiExample(
@@ -53,7 +53,7 @@ class ScoreViewSet(
     # Definición del método para crear un nuevo objeto Score.
     def create(self, request: Request, *args, **kwargs) -> Response:
         # Serializa, valida y guarda la persona a crear.
-        persona_serializer = serializers.PersonaSerializer(data=request.data)
+        persona_serializer = serializers.PersonaPOSTSerializer(data=request.data)
         persona_serializer.is_valid(raise_exception=True)
         persona: models.Persona = persona_serializer.save()
 
@@ -68,7 +68,7 @@ class ScoreViewSet(
         return Response(res_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     @extend_schema(
-        request=serializers.PersonaSerializer,
+        request=serializers.PersonaPOSTSerializer,
         responses={status.HTTP_200_OK: serializer_class},
         examples=[
             OpenApiExample(
@@ -90,7 +90,7 @@ class ScoreViewSet(
         instance = self.get_object()
 
         # Serializa, valida y guarda la persona a actualizar.
-        persona_serializer = serializers.PersonaSerializer(
+        persona_serializer = serializers.PersonaPOSTSerializer(
             instance=instance.persona, data=request.data
         )
         persona_serializer.is_valid(raise_exception=True)
