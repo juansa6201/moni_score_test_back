@@ -9,7 +9,7 @@ from scoring import views
 # Define el enrutador de la aplicación.
 router = routers.DefaultRouter()
 router.root_view_name = 'api'
-router.register('scores', views.ScoreViewSet)
+router.register('score', views.ScoreViewSet)
 
 
 urlpatterns = [
