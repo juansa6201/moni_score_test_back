@@ -1,7 +1,9 @@
+version: '3.8'
+
 services:
-  app:
-    image: moni-score
-    container_name: moni_app
+  backend:
+    image: score-backend
+    container_name: score_backend
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -11,6 +13,17 @@ services:
       - 8000:8000
     depends_on:
       - db
+
+  frontend:
+    image: score-frontend
+    container_name: score_frontend
+    build:
+      context: ../moni_score_test_front
+      dockerfile: ./Dockerfile
+    ports:
+      - 3000:80
+    depends_on:
+      - backend
 
   db:
     image: postgres:15.2-alpine
