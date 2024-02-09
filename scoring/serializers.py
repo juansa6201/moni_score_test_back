@@ -16,6 +16,22 @@ logger = logging.getLogger('scoring.serializers')
 class PersonaSerializer(s.ModelSerializer[models.Persona]):
     """Serializer para el modelo Persona."""
 
+    genero = s.CharField(source='get_genero_display', read_only=True)
+
+    class Meta:
+        model = models.Persona
+        fields = (
+            'nombre',
+            'apellido',
+            'dni',
+            'email',
+            'genero',
+        )
+
+
+class PersonaPOSTSerializer(s.ModelSerializer[models.Persona]):
+    """Serializer para el modelo Persona."""
+
     class Meta:
         model = models.Persona
         fields = (
@@ -36,6 +52,7 @@ class ScoreSerializer(s.ModelSerializer[models.Score]):
     class Meta:
         model = models.Score
         fields = (
+            'id',
             'persona',
             'status',
         )
