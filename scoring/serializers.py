@@ -30,7 +30,7 @@ class PersonaSerializer(s.ModelSerializer[models.Persona]):
 
 
 class PersonaPOSTSerializer(s.ModelSerializer[models.Persona]):
-    """Serializer para el modelo Persona."""
+    """Serializer para la creación de una nueva Persona."""
 
     class Meta:
         model = models.Persona

@@ -87,7 +87,7 @@ class ScoreViewSet(
     # Definición del método para actualizar un objeto Score.
     def update(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         # Obtiene la instancia Score.
-        instance = self.get_object()
+        instance: models.Score = self.get_object()
 
         # Serializa, valida y guarda la persona a actualizar.
         persona_serializer = serializers.PersonaPOSTSerializer(
