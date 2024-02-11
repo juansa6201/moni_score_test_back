@@ -1,0 +1,63 @@
+name: "Continuous Integration"
+on:
+  push:
+    branches:
+      - 'main'
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - 'main'
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - uses: actions/cache@v3
+        id: cache
+        with:
+          path: |
+            ${{ env.pythonLocation }}
+            .mypy_cache
+          key: >
+            lint
+            ${{ runner.os }}
+            ${{ env.pythonLocation }}
+            ${{ hashFiles('.pre-commit-config.yaml') }}
+            ${{ hashFiles('.flake8') }}
+            ${{ hashFiles('pyproject.toml') }}
+
+      - uses: pre-commit/action@v3.0.0
+        with:
+          extra_args: --all-files --verbose
+
+  test-unit:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pipenv'
+
+      - name: Install pipenv
+        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+
+      - name: Install dependencies
+        run: |
+          PIP_DISABLE_PIP_VERSION_CHECK=1 python -m pipenv install --dev
+
+      - name: Run tests
+        run: |
+          cp .env.sample .env
+          pipenv run test
